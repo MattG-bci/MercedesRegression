@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn import linear_model
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
 from MercAnalysis import preprocess_mercedes
 
 
@@ -23,9 +22,12 @@ data = preprocess_mercedes(df)
 prices = df['price'].values
 attributes = [df['year'].values, df['mileage'].values, df['mpg'].values]
 
-#x_train, x_test, y_train, y_test = train_test_split(, prices)
-# Next step, splitting the data for multivariate linear regression
+x_train, x_test, y_train, y_test = train_test_split(df[['year', 'mileage', 'mpg', 'model', 'fuelType', 'transmission', 'engineSize']], prices, test_size=0.2)
 
+reg = LinearRegression()
+reg.fit(x_train, y_train)
+reg.predict(x_test)
+print(reg.score(x_test, y_test))
 
 
 
