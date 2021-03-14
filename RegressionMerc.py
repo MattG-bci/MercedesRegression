@@ -29,6 +29,3 @@ reg.fit(x_train, y_train)
 reg.predict(x_test)
 print(reg.score(x_test, y_test))
 
-
-
-
