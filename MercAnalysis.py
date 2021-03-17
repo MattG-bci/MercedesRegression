@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 import matplotlib.ticker
 
 
-df = pd.read_csv("merc.csv")
+df = pd.read_csv("merc.csv")  # Loading the dataset
 
 le = LabelEncoder() # Using LabelEncoder to transform string attributes to integers
 transmission_le = le.fit_transform(df["transmission"].values)
@@ -48,9 +48,11 @@ def preprocess_mercedes(data):
     return data
 
 
+# Preprocessing the data before visualization
 df = preprocess_mercedes(df)
 y = df['price'].values
 
+# Creating a correlation bar graph
 corr_matrix = []
 for i in range(9):
     r = np.corrcoef(df.iloc[:, i], y)
@@ -67,37 +69,43 @@ plt.xlabel("Attributes", labelpad=15)
 plt.show()
 # I've chosen to investigate on year, model, mileage, mpg and engineSize
 
-plt.scatter(df["model"].values, y)
-plt.title("Price/Model relationship")
-plt.ylabel("Price [£]")
-plt.xlabel("Model encoded value")
-plt.show()
 
-plt.scatter(df['year'].values, y)  # Exponential behaviour
-plt.title("Price/Year relationship")
-plt.ylabel("Price [£]")
-plt.xlabel("Year")
-locator = matplotlib.ticker.MultipleLocator(2)
-plt.gca().xaxis.set_major_locator(locator)
-formatter = matplotlib.ticker.StrMethodFormatter("{x:.0f}")
-plt.gca().xaxis.set_major_formatter(formatter)
-plt.show()
+def visualise():
+    """
+    Function which visualize relationships between attributes and a price.
 
-plt.scatter(df["mileage"], y)  # Decreasing exponential behaviour with one strange data point
-plt.title("Price/Mileage relationship")
-plt.ylabel("Price [£]")
-plt.xlabel("Mileage [miles]")
-plt.show()
+    """
+    plt.scatter(df["model"].values, y)
+    plt.title("Price/Model relationship")
+    plt.ylabel("Price [£]")
+    plt.xlabel("Model encoded value")
+    plt.show()
 
-plt.scatter(df['mpg'].values, y)  # Kind off decreasing exponential but not to accurate scatter
-plt.title("Price/Combustion relationship")
-plt.ylabel("Price [£]")
-plt.xlabel("Combustion [miles per gallon]")
-plt.show()
+    plt.scatter(df['year'].values, y)  # Exponential behaviour
+    plt.title("Price/Year relationship")
+    plt.ylabel("Price [£]")
+    plt.xlabel("Year")
+    locator = matplotlib.ticker.MultipleLocator(2)
+    plt.gca().xaxis.set_major_locator(locator)
+    formatter = matplotlib.ticker.StrMethodFormatter("{x:.0f}")
+    plt.gca().xaxis.set_major_formatter(formatter)
+    plt.show()
 
-plt.scatter(df['engineSize'], y)  # not good
-plt.title("Price/Engine size relationship")
-plt.ylabel("Price [£]")
-plt.xlabel("Engine size")
-plt.show()
+    plt.scatter(df["mileage"], y)  # Decreasing exponential behaviour with one strange data point
+    plt.title("Price/Mileage relationship")
+    plt.ylabel("Price [£]")
+    plt.xlabel("Mileage [miles]")
+    plt.show()
+
+    plt.scatter(df['mpg'].values, y)  # Kind off decreasing exponential but not to accurate scatter
+    plt.title("Price/Combustion relationship")
+    plt.ylabel("Price [£]")
+    plt.xlabel("Combustion [miles per gallon]")
+    plt.show()
+
+    plt.scatter(df['engineSize'], y)
+    plt.title("Price/Engine size relationship")
+    plt.ylabel("Price [£]")
+    plt.xlabel("Engine size")
+    plt.show()
 
