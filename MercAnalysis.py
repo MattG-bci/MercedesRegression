@@ -1,19 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.ticker
 
 
 df = pd.read_csv("merc.csv")  # Loading the dataset
-
-le = LabelEncoder() # Using LabelEncoder to transform string attributes to integers
-transmission_le = le.fit_transform(df["transmission"].values)
-df["transmission"] = transmission_le
-fuel_le = le.fit_transform(df["fuelType"].values)
-df["fuelType"] = fuel_le
-model_le = le.fit_transform(df["model"].values)
-df["model"] = model_le
 
 # Checking the data
 info = df.info()
@@ -52,21 +45,6 @@ def preprocess_mercedes(data):
 df = preprocess_mercedes(df)
 y = df['price'].values
 
-# Creating a correlation bar graph
-corr_matrix = []
-for i in range(9):
-    r = np.corrcoef(df.iloc[:, i], y)
-    corr_matrix.append(r[0, 1])
-
-# Plotting the results
-cols = [col for col in df]
-
-plt.bar(cols, corr_matrix)
-plt.ylabel("Correlation coefficient")
-plt.ylim(top=1)
-plt.ylim(bottom=-1)
-plt.xlabel("Attributes", labelpad=15)
-plt.show()
 # I've chosen to investigate on year, model, mileage, mpg and engineSize
 
 
@@ -75,10 +53,7 @@ def visualise():
     Function which visualize relationships between attributes and a price.
 
     """
-    plt.scatter(df["model"].values, y)
-    plt.title("Price/Model relationship")
-    plt.ylabel("Price [£]")
-    plt.xlabel("Model encoded value")
+    sns.boxplot(y='price', x='model', data=df)
     plt.show()
 
     plt.scatter(df['year'].values, y)  # Exponential behaviour
@@ -103,9 +78,31 @@ def visualise():
     plt.xlabel("Combustion [miles per gallon]")
     plt.show()
 
-    plt.scatter(df['engineSize'], y)
-    plt.title("Price/Engine size relationship")
-    plt.ylabel("Price [£]")
-    plt.xlabel("Engine size")
+    sns.boxplot(y='price', x='engineSize', data=df)
     plt.show()
 
+visualise()
+
+le = LabelEncoder() # Using LabelEncoder to transform string attributes to integers
+transmission_le = le.fit_transform(df["transmission"].values)
+df["transmission"] = transmission_le
+fuel_le = le.fit_transform(df["fuelType"].values)
+df["fuelType"] = fuel_le
+model_le = le.fit_transform(df["model"].values)
+df["model"] = model_le
+
+
+corr_matrix = []
+for i in range(9):
+    r = np.corrcoef(df.iloc[:, i], y)
+    corr_matrix.append(r[0, 1])
+
+# Plotting the results
+cols = [col for col in df]
+
+plt.bar(cols, corr_matrix)
+plt.ylabel("Correlation coefficient")
+plt.ylim(top=1)
+plt.ylim(bottom=-1)
+plt.xlabel("Attributes", labelpad=15)
+plt.show()
